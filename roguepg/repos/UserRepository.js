@@ -39,14 +39,13 @@ class UserRepository {
         let oldEquip = user.character.weapon; 
         user.character.weapon = equip;
         
-        //TODO make this work
-        var index = user.character.equips.indexOf(e => e.id == equip.id);
-        console.log(index)
-        if (index > -1) {
-            user.character.equips.splice(index, 1);
-        }
+        user.character.inventory.equips = user.character.inventory.equips.filter(e => e.id != equip.id);
 
-        user.character.equips.push(oldEquip);
+        if(!oldEquip){
+            return;
+        }
+        
+        user.character.inventory.equips.push(oldEquip);
     }
 }
 
