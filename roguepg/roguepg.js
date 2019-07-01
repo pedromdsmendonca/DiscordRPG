@@ -78,6 +78,13 @@ class RoguePG{
             .addField('Defense', user.character.def, true)
             .addField('Attack', user.character.att, true)
             .addField('Magic', user.character.matt, true)
+
+        let weapon = user.character.weapon;
+        if(weapon){
+            embed
+                .addBlankField()
+                .addField('Weapon', weapon.id)
+        }
         
         return msg.reply(embed);
     }
@@ -149,6 +156,7 @@ class RoguePG{
         let equip = this.userRepository.getEquip(msg.author.id, args[1]);
         if(!equip || equip == null) return msg.reply('You do not have that equip! Check your equips with !equips');
        
+        this.userRepository.equip(msg.author.id, equip);
         msg.reply('OK!');
     }
 }
