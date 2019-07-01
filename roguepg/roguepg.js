@@ -56,7 +56,11 @@ class RoguePG{
                     }
                 ]
             },
-            equips: []
+            equips: [],
+            weapon: {},
+            armor: {},
+            ring: {},
+            amulet: {}
         }
     }
 
@@ -132,7 +136,20 @@ class RoguePG{
     getEquips(msg){
         let equips = this.userRepository.getEquips(msg.author.id);
 
-        msg.reply(equips.length);
+        var response = '';
+
+        equips.forEach(e => {
+            response += '<' + e.id + '>\n';
+        });
+              
+        return msg.reply(response);
+    }
+
+    equipItem(msg, args){
+        let equip = this.userRepository.getEquip(msg.author.id, args[1]);
+        if(!equip || equip == null) return msg.reply('You do not have that equip! Check your equips with !equips');
+       
+        msg.reply('OK!');
     }
 }
 

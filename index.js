@@ -43,6 +43,10 @@ bot.on('message', msg => {
     if(args[0] === '!equips'){
         return rpg.getEquips(msg);
     }
+
+    if(args[0] === '!equip'){
+        return rpg.equipItem(msg, args);
+    }
 });
 
 bot.login(config.token);

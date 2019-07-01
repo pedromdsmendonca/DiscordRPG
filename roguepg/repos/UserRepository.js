@@ -24,6 +24,14 @@ class UserRepository {
 
         return user.character.inventory.equips;
     }
+
+    getEquip(id, equipId){
+        let user = this.users.find(u => u.discordId == id);
+        if(!user) return null;
+
+        let equip = user.character.inventory.equips.find(e => e.id == equipId);
+        return equip;
+    }
 }
 
 module.exports = UserRepository;
