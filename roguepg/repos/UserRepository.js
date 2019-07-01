@@ -1,19 +1,6 @@
 class UserRepository {
     constructor(){
-        this.users = [
-            {
-                name: 'john',
-                discordId: '1'
-            },
-            {
-                name: 'jane',
-                discordId: '2'
-            },
-            {
-                name: 'doe',
-                discordId: '3'
-            },
-        ];
+        this.users = []
     }
 
     addUser(user, character){
@@ -22,6 +9,20 @@ class UserRepository {
             discordId: user.discordId,
             character: character
         });
+    }
+
+    getConsumables(id){
+        let user = this.users.find(u => u.discordId == id);
+        if(!user) return null;
+
+        return user.character.inventory.consumables.filter(c => c.quantity > 0);
+    }
+
+    getEquips(id){
+        let user = this.users.find(u => u.discordId == id);
+        if(!user) return null;
+
+        return user.character.inventory.equips;
     }
 }
 

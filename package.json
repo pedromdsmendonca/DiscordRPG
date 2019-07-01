@@ -12,6 +12,7 @@
     "discord.js": "^11.5.1",
     "ffmpeg": "0.0.4",
     "opusscript": "0.0.6",
+    "random-int": "^2.0.0",
     "uuid": "^3.3.2"
   }
 }

@@ -2,11 +2,14 @@ const UserRepository = require('./repos/UserRepository');
 const DungeonRepository = require('./repos/DungeonRepository');
 const Discord = require('discord.js');
 
+const Equip = require('./models/equip');
+
 class RoguePG{
     constructor(){
         this.userRepository = new UserRepository();
         this.dungeonRepository = new DungeonRepository();
         this.cooldowns = {}
+        this.confirmationCodes = {}
     }
 
     register(msg, name){
@@ -14,13 +17,18 @@ class RoguePG{
             return msg.reply('You already have a character! If you want to create a new first delete your current one! (!rpg delete)');
         }
 
+        if(!name){
+            return msg.reply('You need to suply a character name! (!create <name>)');
+        }
+
         this.userRepository.addUser({name: msg.author.name, discordId: msg.author.id}, this.createCharacter(name));
-        return msg.reply('Created a character!');
+        return msg.reply('Successfuly created your character!');
     }
 
     createCharacter(name){
         return {
             name: name,
+            class: "Warrior",
             level: 1,
             hp: 10,
             att: 5,
@@ -28,7 +36,26 @@ class RoguePG{
             gold: 0,
             eva: 5,
             exp: 0,
-            inventory: [],
+            inventory: {
+                equips: [
+                    new Equip(),
+                    new Equip()
+                ],
+                consumables: [
+                    {
+                        name: "an item",
+                        quantity: 3
+                    },
+                    {
+                        name: "another item",
+                        quantity: 1
+                    },
+                    {
+                        name: "last item",
+                        quantity: 0
+                    }
+                ]
+            },
             equips: []
         }
     }
@@ -36,7 +63,7 @@ class RoguePG{
     getCharacter(msg){
         let user = this.userRepository.users.find(u => u.discordId == msg.author.id);
         
-        if(!user) return msg.reply('You have not created a character yet! (!rpg create)');
+        if(!user) return msg.reply('You have not created a character yet! (!create <name>)');
 
         let embed = new Discord.RichEmbed()
             .setTitle('Character Status')
@@ -52,13 +79,12 @@ class RoguePG{
     }
 
     getDungeonList(msg){
-
         let dungs = this.dungeonRepository.dungeons;
 
         var response = '';
 
         dungs.forEach(d => {
-            response += d.name + '\n';
+            response += d.name + ' <' + d.tag + '>\n';
         });
               
         return msg.reply(response);
@@ -67,7 +93,7 @@ class RoguePG{
     attemptDungeon(msg, tag){
         let dung = this.dungeonRepository.dungeons.find(d => d.tag == tag);
 
-        if(!dung) return msg.reply('Invalid tag! Check which tags exist with !rpg dungeon');
+        if(!dung) return msg.reply('Invalid tag! Check which tags exist with !dungeon');
 
         let user = this.userRepository.users.find(u => u.discordId == msg.author.id);
 
@@ -77,7 +103,7 @@ class RoguePG{
 
         setTimeout(() => {
             msg.reply('Finished dungeon!');
-        }, dung.cooldown * 1000)
+        }, dung.cooldown * 1000);
     }
 
     performAction(msg){
@@ -95,6 +121,18 @@ class RoguePG{
         }
         this.cooldowns[msg.author.id] = currentTime;
         return msg.reply('doing action for X seconds');
+    }
+
+    getConsumables(msg){
+        let consumables = this.userRepository.getConsumables(msg.author.id);
+
+        msg.reply(consumables.length);
+    }
+
+    getEquips(msg){
+        let equips = this.userRepository.getEquips(msg.author.id);
+
+        msg.reply(equips.length);
     }
 }
 
