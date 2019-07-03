@@ -8,7 +8,30 @@ module.exports = (name) => {
         gold: 0,
         eva: 5,
         exp: 0,
-        inventory: [],
-        equips: []
+        inventory: {
+            equips: [
+                new Equip(),
+                new Equip()
+            ],
+            consumables: [
+                {
+                    name: "an item",
+                    quantity: 3
+                },
+                {
+                    name: "another item",
+                    quantity: 1
+                },
+                {
+                    name: "last item",
+                    quantity: 0
+                }
+            ]
+        },
+        equips: [],
+        weapon: {},
+        armor: {},
+        ring: {},
+        amulet: {}
     }
 }
