@@ -3,22 +3,16 @@ const Equip = require('./models/equip');
 module.exports = () => {
     return {
         equips: [
-            new Equip(),
-            new Equip(),
-            new Equip()
+            new Equip(1,1,0),
+            new Equip(1,1,1),
+            new Equip(1,1,2),
+            new Equip(1,1,3)
         ],
         consumables: [
             {
-                name: "an item",
-                quantity: 3
-            },
-            {
-                name: "another item",
+                name: 'Enhance Crystal',
+                tag: 'eh',
                 quantity: 1
-            },
-            {
-                name: "last item",
-                quantity: 0
             }
         ]
     }

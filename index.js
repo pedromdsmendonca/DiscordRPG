@@ -28,13 +28,13 @@ bot.on('message', msg => {
         return rpg.getCharacter(msg);
     }
 
-    if(args[0] === '!dungeon'){
-        if(!args[1]){
-            return rpg.getDungeonList(msg);
-        }
+    // if(args[0] === '!dungeon'){
+    //     if(!args[1]){
+    //         return rpg.getDungeonList(msg);
+    //     }
 
-        return rpg.attemptDungeon(msg, args[1]);
-    }
+    //     return rpg.attemptDungeon(msg, args[1]);
+    // }
 
     if(args[0] === '!items'){
         return rpg.getConsumables(msg);

@@ -5,9 +5,6 @@ const baseDef = 8;
 const baseMdef = 8;
 const baseEva = 5;
 
-//TODO get exp progression formula
-
-
 class CharacterManager {
     generateCharacter(name){
         return {
@@ -45,6 +42,7 @@ class CharacterManager {
         }
     }
 
+    //TODO get exp progression formula
     //returns the needed exp for the next level
     neededExp(level){
         return level*10;

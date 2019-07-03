@@ -48,10 +48,14 @@ class RoguePG{
                 .addField('Evasion', stats.eva, true)
 
             let weapon = user.character.weapon;
-            if(weapon){
+            if(!weapon){
                 embed
                     .addBlankField()
-                    .addField('Weapon', weapon.id)
+                    .addField('Weapon', '')
+            } else{
+                embed
+                .addBlankField()
+                .addField('Weapon', weapon.id)
             }
             
             return msg.reply(embed);
@@ -104,9 +108,16 @@ class RoguePG{
     }
 
     getConsumables(msg){
-        let consumables = this.userRepository.getConsumables(msg.author.id);
+        this.userRepository.getUser(msg.author.id).then(user => {
+            let consumables = user.character.inventory.consumables;
 
-        msg.reply(consumables.length);
+            let resp = '';
+            consumables.filter(c => c.quantity > 0).forEach(c => {
+                resp += `${c.name} <${c.tag}> x${c.quantity}\n`;
+            });
+
+            msg.reply(resp);
+        });
     }
 
     getEquips(msg){
