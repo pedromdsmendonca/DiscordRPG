@@ -9,10 +9,7 @@ module.exports = (name) => {
         eva: 5,
         exp: 0,
         inventory: {
-            equips: [
-                new Equip(),
-                new Equip()
-            ],
+            equips: [],
             consumables: [
                 {
                     name: "an item",
