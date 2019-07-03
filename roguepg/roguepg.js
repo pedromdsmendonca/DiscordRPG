@@ -2,7 +2,7 @@ const UserRepository = require('./repos/UserRepository');
 const DungeonRepository = require('./repos/DungeonRepository');
 const Discord = require('discord.js');
 
-const Character = require('./characterCreator');
+const CharManager = require('./character');
 const Inventory = require('./inventoryCreator');
 
 class RoguePG{
@@ -11,6 +11,7 @@ class RoguePG{
         this.dungeonRepository = new DungeonRepository();
         this.cooldowns = {}
         this.confirmationCodes = {}
+        this.charManager = new CharManager();
     }
 
     register(msg, name){
@@ -19,7 +20,7 @@ class RoguePG{
                 return msg.reply('You already have a character! If you want to create a new first delete your current one! (!rpg delete)');
             }
     
-            let char = Character(name);
+            let char = this.charManager.generateCharacter(name);
             char.inventory = Inventory();
             
             this.userRepository.addUser({name: msg.member.user.tag, discordId: msg.author.id}, char);
@@ -30,16 +31,21 @@ class RoguePG{
     getCharacter(msg){
         this.userRepository.getUser(msg.author.id).then(user => {
             if(!user) return msg.reply('You have not created a character yet! (!rpg create)');
+
+            let stats = this.charManager.getStats(user.character);
     
             let embed = new Discord.RichEmbed()
                 .setTitle('Character Status')
                 .addField('Name', user.character.name, true)
                 .addField('Lvl', user.character.level, true)
+                .addField('Exp', `${user.character.exp}/${stats.neededExp} (${100*user.character.exp/stats.neededExp >> 0}%)`)
                 .addBlankField()
-                .addField('HP', user.character.hp, true)
-                .addField('Defense', user.character.def, true)
-                .addField('Attack', user.character.att, true)
-                .addField('Magic', user.character.matt, true)
+                .addField('HP', stats.hp, true)
+                .addField('Defense', stats.def, true)
+                .addField('Magic Resistance', stats.mdef, true)
+                .addField('Attack', stats.att, true)
+                .addField('Magic Power', stats.matt, true)
+                .addField('Evasion', stats.eva, true)
 
             let weapon = user.character.weapon;
             if(weapon){
