@@ -116,7 +116,7 @@ class RoguePG{
                 resp += `${c.name} <${c.tag}> x${c.quantity}\n`;
             });
 
-            msg.reply(resp);
+            return msg.reply(resp);
         });
     }
 
@@ -128,23 +128,58 @@ class RoguePG{
     }
 
     getEquips(msg){
-        let equips = this.userRepository.getEquips(msg.author.id);
+        this.userRepository.getUser(msg.author.id).then(user => {
+            let equips = user.character.inventory.equips;
 
-        var response = '';
-
-        equips.forEach(e => {
-            response += '<' + e.id + '>\n';
-        });
-              
-        return msg.reply(response);
+            //TODO add equip stats and color coding for readability
+            let resp = '';   
+            equips.forEach(e => {
+                let type = e.type
+                resp += 
+                `
+                [${e.grade} ${e.type} Lvl.${e.lvl}] +${e.enhance}
+                <${e.id}>
+                ---------------------------
+                `;
+            });
+                  
+            return msg.reply(resp);
+        }); 
     }
 
-    equipItem(msg, args){
-        let equip = this.userRepository.getEquip(msg.author.id, args[1]);
-        if(!equip || equip == null) return msg.reply('You do not have that equip! Check your equips with !equips');
-       
-        this.userRepository.equip(msg.author.id, equip);
-        msg.reply('OK!');
+    equipItem(msg, id){
+        this.userRepository.getUser(msg.author.id).then(user => {
+            let equip = user.character.inventory.equips.find(e => e.id == id);
+            if(!equip || equip == null) return msg.reply('You do not have that equip! Check your equips: !equips');
+            
+            var oldEquip;
+            switch(equip.type){
+                case 0:
+                    oldEquip = user.character.weapon;
+                    user.character.weapon = equip;
+                    break;
+                case 1:
+                    oldEquip = user.character.armor;
+                    user.character.armor = equip;
+                    break;
+                case 2:
+                    oldEquip = user.character.ring;
+                    user.character.ring = equip;
+                    break;
+                case 3:
+                    oldEquip = user.character.amulet;
+                    user.character.amulet = equip;
+                    break;
+            }
+            
+            if(!oldEquip) user.character.inventory.equips.push(oldEquip);
+
+            user.character.inventory.equips = user.character.inventory.equips.filter(e => e.id != id);
+           
+            this.userRepository.update(user).then( () => {
+                return msg.reply('Equiped!');
+            });
+        });
     }
 }
 

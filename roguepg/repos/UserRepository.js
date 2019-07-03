@@ -36,6 +36,10 @@ class UserRepository {
     getUser(id){
         return coll.findOne({discordId: id});
     }
+
+    update(user){
+        return coll.updateOne({discordId: user.discordId}, {'$set': {character: user.character}});
+    }
 }
 
 module.exports = UserRepository;

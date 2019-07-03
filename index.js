@@ -48,7 +48,7 @@ bot.on('message', msg => {
     }
 
     if(args[0] === '!equip'){
-        return rpg.equipItem(msg, args);
+        return rpg.equipItem(msg, args[1]);
     }
 });
 
