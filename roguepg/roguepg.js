@@ -20,7 +20,8 @@ class RoguePG{
             }
     
             let char = Character(name);
-
+            char.inventory = Inventory();
+            
             this.userRepository.addUser({name: msg.member.user.tag, discordId: msg.author.id}, char);
             return msg.reply('Created a character!');
         });
