@@ -2,8 +2,12 @@ const UserRepository = require('./repos/UserRepository');
 const DungeonRepository = require('./repos/DungeonRepository');
 const Discord = require('discord.js');
 
+const random = require('random-int');
+
 const CharManager = require('./character');
 const Inventory = require('./inventoryCreator');
+
+const Equip = require('./models/equip')
 
 class RoguePG{
     constructor(){
@@ -79,15 +83,16 @@ class RoguePG{
 
         if(!dung) return msg.reply('Invalid tag! Check which tags exist with !dungeon');
 
-        let user = this.userRepository.users.find(u => u.discordId == msg.author.id);
+        this.userRepository.getUser(msg.author.id).then(user => {
 
-        if(user.character.level < dung.level) return msg.reply('Dungeon level is too high for you! Try a weaker dungeon!');
+            if(user.character.level < dung.level) return msg.reply('Dungeon level is too high for you! Try a weaker dungeon!');
 
-        msg.reply('You just started attempting the dungeon! The time for completion is ' + dung.cooldown + ' seconds.');
+            msg.reply('You just started attempting the dungeon! The time for completion is ' + dung.cooldown + ' seconds.');
 
-        setTimeout(() => {
-            msg.reply('Finished dungeon!');
-        }, dung.cooldown * 1000);
+            setTimeout(() => {
+                msg.reply('Finished dungeon!');
+            }, dung.cooldown * 1000);
+        });
     }
 
     performAction(msg){

@@ -2,23 +2,30 @@ class DungeonRepository {
     constructor(){
         this.dungeons = [
             {
-                name: 'Dung 1',
-                tag: 'd1',
+                name: 'Training Grounds',
+                tag: 'tg',
                 cooldown: 10,
-                level: 1
-            },
-            {
-                name: 'Dung 2',
-                tag: 'd2',
-                cooldown: 20,
-                level: 2
-            },
-            {
-                name: 'Dung 3',
-                tag: 'd3',
-                cooldown: 30,
-                level: 3
-            },
+                level: 1,
+                rewards: {
+                    equips: {
+                        dropRate: 50,
+                        rates: {
+                            c: 60,
+                            u: 30,
+                            r: 10,
+                            e: 0,
+                            l: 0
+                        },
+                        level: 1,
+                    },
+                    consumables: {
+                        droprate: 100,
+                        rates: {
+                            eh: 100
+                        }
+                    }
+                }
+            }
         ];
     }
 }
