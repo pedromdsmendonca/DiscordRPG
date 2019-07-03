@@ -2,6 +2,9 @@ const UserRepository = require('./repos/UserRepository');
 const DungeonRepository = require('./repos/DungeonRepository');
 const Discord = require('discord.js');
 
+const Character = require('./characterCreator');
+const Inventory = require('./inventoryCreator');
+
 class RoguePG{
     constructor(){
         this.userRepository = new UserRepository();
@@ -10,45 +13,34 @@ class RoguePG{
     }
 
     register(msg, name){
-        if(this.userRepository.users.find(u => u.discordId == msg.author.id)){
-            return msg.reply('You already have a character! If you want to create a new first delete your current one! (!rpg delete)');
-        }
+        this.userRepository.userExistWithId(msg.author.id).then( r => {
+            if(r){
+                return msg.reply('You already have a character! If you want to create a new first delete your current one! (!rpg delete)');
+            }
+    
+            let char = Character(name);
 
-        this.userRepository.addUser({name: msg.author.name, discordId: msg.author.id}, this.createCharacter(name));
-        return msg.reply('Created a character!');
-    }
-
-    createCharacter(name){
-        return {
-            name: name,
-            level: 1,
-            hp: 10,
-            att: 5,
-            def: 5,
-            gold: 0,
-            eva: 5,
-            exp: 0,
-            inventory: [],
-            equips: []
-        }
+            this.userRepository.addUser({name: msg.member.user.tag, discordId: msg.author.id}, char);
+            return msg.reply('Created a character!');
+        });
     }
 
     getCharacter(msg){
-        let user = this.userRepository.users.find(u => u.discordId == msg.author.id);
-        
-        if(!user) return msg.reply('You have not created a character yet! (!rpg create)');
-
-        let embed = new Discord.RichEmbed()
-            .setTitle('Character Status')
-            .addField('Name', user.character.name, true)
-            .addField('Lvl', user.character.level, true)
-            .addBlankField()
-            .addField('HP', user.character.hp, true)
-            .addField('Defense', user.character.def, true)
-            .addField('Attack', user.character.att, true)
-            .addField('Magic', user.character.matt, true)
-        
-        return msg.reply(embed);
+        this.userRepository.getUser(msg.author.id).then(user => {
+            if(!user) return msg.reply('You have not created a character yet! (!rpg create)');
+    
+            let embed = new Discord.RichEmbed()
+                .setTitle('Character Status')
+                .addField('Name', user.character.name, true)
+                .addField('Lvl', user.character.level, true)
+                .addBlankField()
+                .addField('HP', user.character.hp, true)
+                .addField('Defense', user.character.def, true)
+                .addField('Attack', user.character.att, true)
+                .addField('Magic', user.character.matt, true)
+            
+            return msg.reply(embed);
+        });     
     }
 
     getDungeonList(msg){
