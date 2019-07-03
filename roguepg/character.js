@@ -30,6 +30,16 @@ class CharacterManager {
         let mdef = baseMdef + char.level * 2;
         let eva = baseEva + (char.level/5 >> 0);
 
+        //add the values of the equips if they exist
+        char.weapon.att && (att += char.weapon.att);
+        char.weapon.matt && (matt += char.weapon.matt);
+        char.armor.def && (def += char.armor.def);
+        char.armor.mdef && (def += char.armor.mdef);
+        char.ring.att && (att += char.ring.att);
+        char.ring.hp && (hp += char.ring.hp);
+        char.amulet.eva && (eva += char.amulet.eva);
+        char.amulet.matt && (matt += char.amulet.matt);
+
         //TODO add %dmg inc/dec
         return{
             hp,

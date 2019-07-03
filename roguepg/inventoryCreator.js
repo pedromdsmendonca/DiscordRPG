@@ -12,7 +12,20 @@ module.exports = () => {
             {
                 name: 'Enhance Crystal',
                 tag: 'eh',
+                desc: 'Used to enhance equipment: !enchance <equip>',
                 quantity: 1
+            },
+            {
+                name: 'Blood Gem',
+                tag: 'bg',
+                desc: 'Used to gain a new class. For more info: !class help',
+                quantity: 1
+            },
+            {
+                name: 'Ancient Coin',
+                tag: 'ac',
+                desc: 'Exchange for equips in arena shop: !arena shop',
+                quantity: 0
             }
         ]
     }

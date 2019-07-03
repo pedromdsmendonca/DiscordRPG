@@ -120,6 +120,13 @@ class RoguePG{
         });
     }
 
+    consumableDescription(msg, tag){
+        let cons = Inventory().consumables.find(c => c.tag === tag);
+        if(!cons) return msg.reply('Item tag does not exist. Check available tags: !items');
+
+        return msg.reply(cons.desc);
+    }
+
     getEquips(msg){
         let equips = this.userRepository.getEquips(msg.author.id);
 
