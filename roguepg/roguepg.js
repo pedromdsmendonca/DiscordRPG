@@ -2,8 +2,9 @@ const UserRepository = require('./repos/UserRepository');
 const DungeonRepository = require('./repos/DungeonRepository');
 const Discord = require('discord.js');
 
-const CharManager = require('./character');
+const CharManager = require('./characterManager');
 const Inventory = require('./inventoryCreator');
+const JobManager = require('./jobManager');
 
 const Equip = require('./models/equip');
 const EquipManager = require('./equipManager');
@@ -16,6 +17,7 @@ class RoguePG{
         this.confirmationCodes = {}
         this.charManager = new CharManager();
         this.equipManager = new EquipManager();
+        this.jobManager = new JobManager();
     }
 
     register(msg, name){
@@ -35,13 +37,13 @@ class RoguePG{
     delete(msg){
         this.userRepository.getUser(msg.author.id).then(user => {
             this.userRepository.delete(user);
-            return msg.reply('Deleted character');
+            return msg.reply('Deleted character'); 
         });
     }
 
     getCharacter(msg){
         this.userRepository.getUser(msg.author.id).then(user => {
-            if(!user) return msg.reply('You have not created a character yet! (!rpg create)');
+            if(!user) return msg.reply('You have not created a character yet! (!create <name>)');
 
             let stats = this.charManager.getStats(user.character);
     
@@ -219,6 +221,21 @@ class RoguePG{
            
             this.userRepository.update(user).then( () => {
                 return msg.reply('Equiped!');
+            });
+        });
+    }
+
+    changeJob(msg, jobName){
+        console.log('attempting to change class')
+        this.userRepository.getUser(msg.author.id).then(user => {
+            if(!user) return msg.reply('No character found!');
+
+            let job = this.jobManager.getJob(jobName);
+
+            user.character = this.charManager.addClass(user.character, job);
+           
+            this.userRepository.update(user).then( () => {
+                return msg.reply('Added class!');
             });
         });
     }

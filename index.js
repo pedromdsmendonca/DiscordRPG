@@ -54,6 +54,10 @@ bot.on('message', msg => {
     if(args[0] === '!equip'){
         return rpg.equipItem(msg, args[1]);
     }
+
+    if(args[0] === '!class'){
+        return rpg.changeJob(msg, args[1]);
+    }
 });
 
 bot.login(config.token);

@@ -70,6 +70,11 @@ class CharacterManager {
         }
         return char;
     }
+
+    addClass(char, job){
+        char.classes.push(job);
+        return char;
+    }
 }
 
 module.exports = CharacterManager;
