@@ -57,6 +57,19 @@ class CharacterManager {
     neededExp(level){
         return level*10;
     }
+
+    dungeonSuccess(char, dung){
+        return true;
+    }
+
+    gainExperience(char, exp){
+        char.exp += exp;
+        if(char.exp >= this.neededExp(char.level)){
+            char.level++;
+            char.exp = 0;
+        }
+        return char;
+    }
 }
 
 module.exports = CharacterManager;

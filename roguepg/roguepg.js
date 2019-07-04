@@ -99,6 +99,11 @@ class RoguePG{
             msg.reply('You just started attempting the dungeon! The time for completion is ' + dung.cooldown + ' seconds.');
 
             setTimeout(() => {
+                let success = this.charManager.dungeonSuccess(user.chararcter, dung);
+                if(!success){
+                    return msg.reply('You failed to complete the dungeon! D:');
+                }
+                
                 let reward = this.dungeonRepository.getReward(tag);
                 console.log(reward)
                 if(reward[0] == 'e'){
@@ -107,7 +112,7 @@ class RoguePG{
                     let equip = new Equip(v[0],v[1], v[2]);
                     msg.reply(this.equipManager.printable(equip));
                     user.character.inventory.equips.push(equip);
-                    this.userRepository.update(user);
+                    
                 }
                 else if(reward[0] == 'c'){
                     let t = reward.substring(2, reward.length);
@@ -117,8 +122,9 @@ class RoguePG{
                             c.quantity++;
                         }
                     });
-                    this.userRepository.update(user);
                 }
+                user.character = this.charManager.gainExperience(user.character, dung.exp);
+                this.userRepository.update(user);
                 msg.reply('Finished dungeon!');
             }, dung.cooldown * 1000);
         });
