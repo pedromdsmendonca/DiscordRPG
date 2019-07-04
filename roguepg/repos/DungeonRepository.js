@@ -12,7 +12,7 @@ class DungeonRepository {
                 rewards: {
                     quantity: 1,
                     drops: [
-                        'c:eh',
+                        'c:ec',
                         'e:1,1,0',
                         'e:1,1,1',
                         'e:1,2,0',

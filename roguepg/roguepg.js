@@ -2,8 +2,6 @@ const UserRepository = require('./repos/UserRepository');
 const DungeonRepository = require('./repos/DungeonRepository');
 const Discord = require('discord.js');
 
-const random = require('random-int');
-
 const CharManager = require('./character');
 const Inventory = require('./inventoryCreator');
 
