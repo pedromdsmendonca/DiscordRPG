@@ -40,6 +40,10 @@ class UserRepository {
     update(user){
         return coll.updateOne({discordId: user.discordId}, {'$set': {character: user.character}});
     }
+
+    delete(user){
+        coll.deleteOne({discordId: user.discordId});
+    }
 }
 
 module.exports = UserRepository;

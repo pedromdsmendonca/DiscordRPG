@@ -24,6 +24,10 @@ bot.on('message', msg => {
         return rpg.register(msg, args[1]);
     }
 
+    if(args[0] === '!delete'){
+        return rpg.delete(msg);
+    }
+
     if(args[0] === '!status'){
         return rpg.getCharacter(msg);
     }

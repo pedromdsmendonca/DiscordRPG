@@ -32,6 +32,13 @@ class RoguePG{
         });
     }
 
+    delete(msg){
+        this.userRepository.getUser(msg.author.id).then(user => {
+            this.userRepository.delete(user);
+            return msg.reply('Deleted character');
+        });
+    }
+
     getCharacter(msg){
         this.userRepository.getUser(msg.author.id).then(user => {
             if(!user) return msg.reply('You have not created a character yet! (!rpg create)');
