@@ -7,7 +7,8 @@ const random = require('random-int');
 const CharManager = require('./character');
 const Inventory = require('./inventoryCreator');
 
-const Equip = require('./models/equip')
+const Equip = require('./models/equip');
+const EquipManager = require('./equipManager');
 
 class RoguePG{
     constructor(){
@@ -16,6 +17,7 @@ class RoguePG{
         this.cooldowns = {}
         this.confirmationCodes = {}
         this.charManager = new CharManager();
+        this.equipManager = new EquipManager();
     }
 
     register(msg, name){
@@ -72,7 +74,14 @@ class RoguePG{
         var response = '';
 
         dungs.forEach(d => {
-            response += d.name + ' <' + d.tag + '>\n';
+            response += 
+            `
+            [${d.name}] <${d.tag}>
+            Lvl.${d.level}
+            Time: ${d.cooldown} seconds
+            ---------------------------
+            `;
+                d.name + ' <' + d.tag + '>\n';
         });
               
         return msg.reply(response);
@@ -90,6 +99,26 @@ class RoguePG{
             msg.reply('You just started attempting the dungeon! The time for completion is ' + dung.cooldown + ' seconds.');
 
             setTimeout(() => {
+                let reward = this.dungeonRepository.getReward(tag);
+                console.log(reward)
+                if(reward[0] == 'e'){
+                    let v = reward.substring(2, reward.length);
+                    v = v.split(',');
+                    let equip = new Equip(v[0],v[1], v[2]);
+                    msg.reply(this.equipManager.printable(equip));
+                    user.character.inventory.equips.push(equip);
+                    this.userRepository.update(user);
+                }
+                else if(reward[0] == 'c'){
+                    let t = reward.substring(2, reward.length);
+                    user.character.inventory.consumables.forEach(c => {
+                        if(c.tag == t){
+                            msg.reply(c.name);
+                            c.quantity++;
+                        }
+                    });
+                    this.userRepository.update(user);
+                }
                 msg.reply('Finished dungeon!');
             }, dung.cooldown * 1000);
         });
@@ -139,13 +168,9 @@ class RoguePG{
             //TODO add equip stats and color coding for readability
             let resp = '';   
             equips.forEach(e => {
-                let type = e.type
-                resp += 
-                `
-                [${e.grade} ${e.type} Lvl.${e.lvl}] +${e.enhance}
-                <${e.id}>
-                ---------------------------
-                `;
+                
+                resp += this.equipManager.printable(e);
+                
             });
                   
             return msg.reply(resp);
