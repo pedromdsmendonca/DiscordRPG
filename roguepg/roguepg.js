@@ -61,10 +61,11 @@ class RoguePG{
                 .addField('Evasion', stats.eva, true)
 
             let weapon = user.character.weapon;
+
             if(!weapon){
                 embed
                     .addBlankField()
-                    .addField('Weapon', '')
+                    .addField('Weapon', 'NONE')
             } else{
                 embed
                 .addBlankField()
@@ -194,7 +195,7 @@ class RoguePG{
         this.userRepository.getUser(msg.author.id).then(user => {
             let equip = user.character.inventory.equips.find(e => e.id == id);
             if(!equip || equip == null) return msg.reply('You do not have that equip! Check your equips: !equips');
-            
+
             var oldEquip;
             switch(equip.type){
                 case 0:
@@ -215,7 +216,9 @@ class RoguePG{
                     break;
             }
             
-            if(!oldEquip) user.character.inventory.equips.push(oldEquip);
+            if(oldEquip){
+                user.character.inventory.equips.push(oldEquip);
+            } 
 
             user.character.inventory.equips = user.character.inventory.equips.filter(e => e.id != id);
            
