@@ -23,7 +23,7 @@ class RoguePG{
     register(msg, name){
         this.userRepository.userExistWithId(msg.author.id).then( r => {
             if(r){
-                return msg.reply('You already have a character! If you want to create a new first delete your current one! (!rpg delete)');
+                return msg.reply('You already have a character! If you want to create a new first delete your current one! (!delete)');
             }
     
             let char = this.charManager.generateCharacter(name);
@@ -60,17 +60,17 @@ class RoguePG{
                 .addField('Magic Power', stats.matt, true)
                 .addField('Evasion', stats.eva, true)
 
-            let weapon = user.character.weapon;
+            // let weapon = user.character.weapon;
 
-            if(!weapon){
-                embed
-                    .addBlankField()
-                    .addField('Weapon', 'NONE')
-            } else{
-                embed
-                .addBlankField()
-                .addField('Weapon', weapon.id)
-            }
+            // if(!weapon){
+            //     embed
+            //         .addBlankField()
+            //         .addField('Weapon', 'NONE')
+            // } else{
+            //     embed
+            //     .addBlankField()
+            //     .addField('Weapon', weapon.id)
+            // }
             
             return msg.reply(embed);
         });     

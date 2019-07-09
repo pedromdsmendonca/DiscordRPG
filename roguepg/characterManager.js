@@ -14,10 +14,20 @@ class CharacterManager {
             exp: 0,
             classes: [],
             inventory: null,
-            weapon: null,
+            weapon: {
+                sword: null,
+                greatSword: null,
+                spear: null,
+                staff: null,
+                bow: null,
+                book: null,
+                scythe: null,
+                dagger: null,
+                shield: null
+            },
             armor: null,
             ring: null,
-            amulet: null
+            amulet: null        
         }
     }
 
@@ -31,25 +41,25 @@ class CharacterManager {
         let eva = baseEva + (char.level/5 >> 0);
 
         //add the values of the equips if they exist
-        char.weapon && char.weapon.att && (att += char.weapon.att);
-        char.weapon && char.weapon.matt && (matt += char.weapon.matt);
-        char.armor && char.armor.def && (def += char.armor.def);
-        char.armor && char.armor.mdef && (def += char.armor.mdef);
-        char.ring && char.ring.att && (att += char.ring.att);
-        char.ring && char.ring.hp && (hp += char.ring.hp);
-        char.amulet && char.amulet.eva && (eva += char.amulet.eva);
-        char.amulet && char.amulet.matt && (matt += char.amulet.matt);
+        // char.weapon && char.weapon.att && (att += char.weapon.att);
+        // char.weapon && char.weapon.matt && (matt += char.weapon.matt);
+        // char.armor && char.armor.def && (def += char.armor.def);
+        // char.armor && char.armor.mdef && (def += char.armor.mdef);
+        // char.ring && char.ring.att && (att += char.ring.att);
+        // char.ring && char.ring.hp && (hp += char.ring.hp);
+        // char.amulet && char.amulet.eva && (eva += char.amulet.eva);
+        // char.amulet && char.amulet.matt && (matt += char.amulet.matt);
 
         //add job values
-        char.classes.forEach(c => {
-            console.log('class')
-            c.hp && (hp += c.hp * c.lvl);
-            c.att && (att += c.att * c.lvl);
-            c.matt && (matt += c.matt * c.lvl);
-            c.def && (def += c.def * c.lvl);
-            c.mdef && (mdef += c.mdef * c.lvl);
-            c.eva && (eva += c.eva * c.lvl);
-        });
+        // char.classes.forEach(c => {
+        //     console.log('class')
+        //     c.hp && (hp += c.hp * c.lvl);
+        //     c.att && (att += c.att * c.lvl);
+        //     c.matt && (matt += c.matt * c.lvl);
+        //     c.def && (def += c.def * c.lvl);
+        //     c.mdef && (mdef += c.mdef * c.lvl);
+        //     c.eva && (eva += c.eva * c.lvl);
+        // });
 
         //TODO add %dmg inc/dec
         return{
