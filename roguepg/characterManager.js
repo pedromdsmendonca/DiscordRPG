@@ -4,6 +4,11 @@ const baseMatt = 8;
 const baseDef = 8;
 const baseMdef = 8;
 const baseEva = 5;
+const baseCritRate = 5;
+const baseCritDamage = 150;
+const baseAttSpeed = 100;
+const baseDmgInc = 0;
+const baseDmgRed = 0;
 
 class CharacterManager {
     generateCharacter(name){
@@ -27,18 +32,25 @@ class CharacterManager {
             },
             armor: null,
             ring: null,
-            amulet: null        
+            amulet: null
         }
     }
 
     //TODO take the classes into account
     getStats(char){
+        //these stats increase by levelling
         let hp = baseHp + char.level * 25;
         let att = baseAtt + char.level * 2;
         let matt = baseMatt + char.level * 2;
         let def = baseDef + char.level * 2;
         let mdef = baseMdef + char.level * 2;
-        let eva = baseEva + (char.level/5 >> 0);
+        //these stats are only increased by items/jobs
+        let eva = baseEva;
+        let cr = baseCritRate;
+        let cd = baseCritDamage;
+        let ats = baseAttSpeed;
+        let dmgi = baseDmgInc;
+        let dmgr = baseDmgRed;
 
         //add the values of the equips if they exist
         // char.weapon && char.weapon.att && (att += char.weapon.att);
@@ -61,7 +73,6 @@ class CharacterManager {
         //     c.eva && (eva += c.eva * c.lvl);
         // });
 
-        //TODO add %dmg inc/dec
         return{
             hp,
             att,
@@ -69,6 +80,11 @@ class CharacterManager {
             def,
             mdef,
             eva,
+            cr,
+            cd,
+            dmgi,
+            dmgr,
+            ats,
             neededExp: this.neededExp(char.level)
         }
     }

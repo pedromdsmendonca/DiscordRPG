@@ -21,9 +21,10 @@ class RoguePG{
     }
 
     register(msg, name){
+        //TODO we can jsut get user by id and check if not undefined or null
         this.userRepository.userExistWithId(msg.author.id).then( r => {
             if(r){
-                return msg.reply('You already have a character! If you want to create a new first delete your current one! (!delete)');
+                return msg.reply('You already have a character! If you want to create a new character, first delete your current one! (!delete)');
             }
     
             let char = this.charManager.generateCharacter(name);
@@ -58,7 +59,13 @@ class RoguePG{
                 .addField('Magic Resistance', stats.mdef, true)
                 .addField('Attack', stats.att, true)
                 .addField('Magic Power', stats.matt, true)
-                .addField('Evasion', stats.eva, true)
+                .addBlankField()
+                .addField('Evasion Rate', stats.eva + '%', true)
+                .addField('Crit Rate', stats.cd + '%', true)
+                .addField('Crit Damage', stats.cr + '%', true)
+                .addField('Damage Inflicted Increase', stats.dmgi + '%', true)
+                .addField('Damage Received Decrease', stats.dmgr + '%', true)
+                .addField('Attack Speed', stats.ats + '%', true)
 
             // let weapon = user.character.weapon;
 
