@@ -1,14 +1,25 @@
+//base stats
 const baseHp = 75;
 const baseAtt = 8;
 const baseMatt = 8;
 const baseDef = 8;
 const baseMdef = 8;
+
+//advanced percentage stats
 const baseEva = 5;
 const baseCritRate = 5;
 const baseCritDamage = 150;
 const baseAttSpeed = 100;
 const baseDmgInc = 0;
 const baseDmgRed = 0;
+
+//out of combat stats
+const baseDropRateInc = 0;
+const baseDungSpeedInc = 0;
+
+const jobManager = require('./jobManager')
+
+const jm = new jobManager();
 
 class CharacterManager {
     generateCharacter(name){
@@ -51,27 +62,48 @@ class CharacterManager {
         let ats = baseAttSpeed;
         let dmgi = baseDmgInc;
         let dmgr = baseDmgRed;
+        //out of combat stats (affected by jobs)
+        let bdr = baseDropRateInc;
+        let dsi = baseDungSpeedInc;
 
         //add the values of the equips if they exist
         // char.weapon && char.weapon.att && (att += char.weapon.att);
         // char.weapon && char.weapon.matt && (matt += char.weapon.matt);
-        // char.armor && char.armor.def && (def += char.armor.def);
-        // char.armor && char.armor.mdef && (def += char.armor.mdef);
-        // char.ring && char.ring.att && (att += char.ring.att);
-        // char.ring && char.ring.hp && (hp += char.ring.hp);
-        // char.amulet && char.amulet.eva && (eva += char.amulet.eva);
-        // char.amulet && char.amulet.matt && (matt += char.amulet.matt);
+        char.armor && char.armor.def && (def += char.armor.def);
+        char.armor && char.armor.mdef && (def += char.armor.mdef);
+        char.ring && char.ring.att && (att += char.ring.att);
+        char.ring && char.ring.hp && (hp += char.ring.hp);
+        char.amulet && char.amulet.eva && (eva += char.amulet.eva);
+        char.amulet && char.amulet.matt && (matt += char.amulet.matt);
 
         //add job values
-        // char.classes.forEach(c => {
-        //     console.log('class')
-        //     c.hp && (hp += c.hp * c.lvl);
-        //     c.att && (att += c.att * c.lvl);
-        //     c.matt && (matt += c.matt * c.lvl);
-        //     c.def && (def += c.def * c.lvl);
-        //     c.mdef && (mdef += c.mdef * c.lvl);
-        //     c.eva && (eva += c.eva * c.lvl);
-        // });
+        char.classes.forEach(job => {
+            if(job.active) {              
+                let c = jm.getJob(job.name)
+
+                c.hp && (hp += c.hp * job.lvl);
+                c.att && (att += c.att * job.lvl);
+                c.matt && (matt += c.matt * job.lvl);
+                c.def && (def += c.def * job.lvl);
+                c.mdef && (mdef += c.mdef * job.lvl);
+
+                //base %stat increases
+                c.base.eva && (eva += c.base.eva);
+                c.base.cr && (cr += c.base.cr);
+                c.base.cd && (cd += c.base.cd);
+                c.base.ats && (ats += c.base.ats);
+                c.base.dmgi && (dmgi += c.base.dmgi);
+                c.base.dmgr && (dmgr += c.base.dmgr);
+
+                //lvl %stat increases
+                c.incremental.eva && (eva += c.incremental.eva * job.lvl);
+                c.incremental.cr && (cr += c.incremental.cr * job.lvl);
+                c.incremental.cd && (cd += c.incremental.cd) * job.lvl;
+                c.incremental.ats && (ats += c.incremental.ats * job.lvl);
+                c.incremental.dmgi && (dmgi += c.incremental.dmgi * job.lvl);
+                c.incremental.dmgr && (dmgr += c.incremental.dmgr * job.lvl);
+            }
+        });
 
         return{
             hp,
@@ -85,6 +117,8 @@ class CharacterManager {
             dmgi,
             dmgr,
             ats,
+            bdr,
+            dsi,
             neededExp: this.neededExp(char.level)
         }
     }

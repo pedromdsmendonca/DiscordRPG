@@ -61,11 +61,14 @@ class RoguePG{
                 .addField('Magic Power', stats.matt, true)
                 .addBlankField()
                 .addField('Evasion Rate', stats.eva + '%', true)
-                .addField('Crit Rate', stats.cd + '%', true)
-                .addField('Crit Damage', stats.cr + '%', true)
+                .addField('Crit Rate', stats.cr + '%', true)
+                .addField('Crit Damage', stats.cd + '%', true)
                 .addField('Damage Inflicted Increase', stats.dmgi + '%', true)
                 .addField('Damage Received Decrease', stats.dmgr + '%', true)
                 .addField('Attack Speed', stats.ats + '%', true)
+                .addBlankField()
+                .addField('Drop Rate Increase', stats.bdr + '%', true)
+                .addField('Dungeon Speed Increase', stats.dsi + '%', true)
 
             // let weapon = user.character.weapon;
 
