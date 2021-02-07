@@ -8,7 +8,7 @@ bot.on('ready', () => {
     bot.user.setActivity('Porn Hub', {type: 'WATCHING'}).catch(console.error);
 });
 
-bot.on('message', msg => {
+bot.on('message', async msg => {
     if(msg.author.id === bot.user.id) return;
     
     if(msg.author.bot ) return msg.reply('Sai daqui que este server é meu!');
@@ -24,15 +24,16 @@ bot.on('message', msg => {
     if(msg.content === '!porn'){
         return msg.channel.send('https://pt.pornhub.com/random')
     }
-    // if(args[0] === '-play' || args[0] === '.music'){
-    //     return msg.member.send('NAO PARES DE POR MUSICA SEU MALANDRO!')
-    // }
+    if(args[0] === '-play' || args[0] === '.music'){
+        return msg.member.send('NAO PARES DE POR MUSICA SEU MALANDRO!')
+    }
 });
 
 bot.login(config.token);
 
 function countdown(message, arg){
-    const voiceChannel = message.member.voiceChannel;
+    console.log(message.member)
+    const voiceChannel = message.member.voice.channel;
     if(!voiceChannel) return message.channel.send('Not in voice channel!');
     const permissions = voiceChannel.permissionsFor(message.client.user);
     if (!permissions.has('CONNECT') || !permissions.has('SPEAK')) {
@@ -54,7 +55,7 @@ function countdown(message, arg){
                 file = 'miguel_docinho';
         }
         if (message.content === "!bernardo") file = 'bernardo';
-        const dispatcher = connection.playFile(`./${file}.ogg`);
+        const dispatcher = connection.play(`./${file}.ogg`);
         dispatcher.on("end", end => {voiceChannel.leave()});
       }).catch(e => {
         // Oh no, it errored! Let's log it to console :)
